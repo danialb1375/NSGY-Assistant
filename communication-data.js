@@ -1,21 +1,125 @@
 /* Data-driven communication fields. Draft clinical data remains memory-only. */
-const COMM_FIELDS={
-  age:{label:"Age",placeholder:"74",group:"identity",type:"number"},sex:{label:"Sex",placeholder:"male",group:"identity",type:"select",options:["Female","Male","Other"]},mechanism:{label:"Mechanism",placeholder:"ground-level fall",group:"context"},diagnosis:{label:"Diagnosis",placeholder:"acute SDH",group:"identity"},procedure:{label:"Procedure",placeholder:"right craniotomy",group:"identity"},pod:{label:"Post-operative Day",placeholder:"2",group:"context",type:"number"},symptoms:{label:"Symptoms",placeholder:"headache and confusion",group:"context"},exam:{label:"Neurologic Examination",placeholder:"awake, follows commands, no drift",group:"exam"},gcs:{label:"GCS",placeholder:"14",group:"exam",type:"number",min:3,max:15},pupils:{label:"Pupils",placeholder:"Select pupil finding",group:"exam",type:"select",options:["Equal and reactive","Anisocoric","Fixed","Other"]},motor:{label:"Motor Strength",placeholder:"5/5 throughout",group:"exam"},sensory:{label:"Sensory Findings",placeholder:"intact to light touch",group:"exam"},cranial:{label:"Cranial Nerves",placeholder:"no new cranial nerve deficit",group:"exam"},imaging:{label:"Imaging Findings",placeholder:"acute right convexity SDH",group:"imaging"},thickness:{label:"Hematoma Thickness",placeholder:"12",group:"imaging",type:"number",unit:"mm"},shift:{label:"Midline Shift",placeholder:"6",group:"imaging",type:"number",unit:"mm"},volume:{label:"Hematoma Volume",placeholder:"32",group:"imaging",type:"number",unit:"mL"},hydrocephalus:{label:"Hydrocephalus",placeholder:"Select status",group:"imaging",type:"select",options:["Present","Absent","New","Worsening","Stable"]},ivh:{label:"Intraventricular Hemorrhage",placeholder:"Select status",group:"imaging",type:"select",options:["Present","Absent","New","Worsening","Stable"]},repeatct:{label:"Repeat CT Results",placeholder:"stable at 6 hours",group:"imaging"},bloodthinner:{label:"Anticoagulation / Antiplatelet Status",placeholder:"Select medication",group:"management",type:"select",options:["None","Eliquis","Xarelto","Warfarin","Plavix","Aspirin","Other"]},reversal:{label:"Reversal Status",placeholder:"Select reversal status",group:"management",type:"select",options:["Reversal not indicated","Reversal ordered","Reversal given","Reversal pending"]},calculators:{label:"Calculator Results",placeholder:"ICH Score 2",group:"management",type:"calculator"},operative:{label:"Operative Criteria",placeholder:"meets thickness and shift criteria",group:"management"},recommendations:{label:"Common NSGY Recommendations",placeholder:"repeat CT and hourly neuro checks",group:"management",type:"multiselect"},findings:{label:"Selected Workflow Findings",placeholder:"Selected findings appear here automatically",group:"context"},notes:{label:"Additional Notes",placeholder:"Any other essential context",group:"notes"},mri:{label:"MRI Findings",placeholder:"PLC disruption at T12–L1",group:"imaging"},asia:{label:"ASIA Grade",placeholder:"Select grade",group:"exam",type:"select",options:["AIS A","AIS B","AIS C","AIS D","AIS E"]},tlics:{label:"TLICS Score",placeholder:"5",group:"management",type:"number",min:0},cord:{label:"Cord Compression",placeholder:"moderate ventral compression",group:"imaging"},fracture:{label:"Fracture Level",placeholder:"L1 burst fracture",group:"imaging"},stability:{label:"Spinal Stability",placeholder:"mechanically unstable",group:"imaging",type:"select",options:["Stable","Indeterminate","Mechanically unstable"]},bladder:{label:"Bowel / Bladder",placeholder:"new urinary retention; PVR 650 mL",group:"exam"},saddle:{label:"Saddle Sensation",placeholder:"diminished bilaterally",group:"exam",type:"select",options:["Intact","Diminished","Absent","Other"]},fever:{label:"Fever / Infection Findings",placeholder:"38.7°C with wound erythema",group:"context"},wound:{label:"Wound Findings",placeholder:"dry and intact",group:"context"},drain:{label:"Drain Findings",placeholder:"EVD at 10; 8 mL clear CSF last hour",group:"management"},icp:{label:"ICP",placeholder:"14",group:"exam",type:"number",unit:"mmHg"},aneurysm:{label:"Aneurysm Status",placeholder:"Select status",group:"management",type:"select",options:["Unsecured","Secured by coiling","Secured by clipping","Other"]},sahday:{label:"SAH Day",placeholder:"4",group:"context",type:"number"},hunt:{label:"Hunt–Hess Grade",placeholder:"III",group:"exam",type:"select",options:["I","II","III","IV","V"]},fisher:{label:"Modified Fisher Grade",placeholder:"4",group:"imaging",type:"select",options:["0","1","2","3","4"]},shunt:{label:"Shunt Details",placeholder:"right VP shunt, setting 1.5",group:"context"},seizure:{label:"Seizure Details",placeholder:"generalized seizure lasting 3 minutes",group:"context"}
-};
-const COMM_DEFAULT=["age","sex","diagnosis","symptoms","exam","gcs","pupils","imaging","bloodthinner","notes"];
-const COMM_WORKFLOWS={
- "traumatic-bleed":["age","sex","mechanism","diagnosis","symptoms","exam","gcs","pupils","imaging","thickness","shift","hydrocephalus","ivh","bloodthinner","reversal","repeatct","calculators","operative","recommendations","notes"],
- "ich-spontaneous":["age","sex","diagnosis","symptoms","exam","gcs","pupils","imaging","volume","shift","hydrocephalus","ivh","bloodthinner","reversal","repeatct","calculators","operative","recommendations","notes"],
- "asah":["age","sex","diagnosis","sahday","symptoms","exam","gcs","pupils","hunt","imaging","fisher","hydrocephalus","ivh","aneurysm","repeatct","calculators","recommendations","notes"],
- "spine-trauma":["age","sex","mechanism","diagnosis","symptoms","exam","motor","sensory","bladder","fracture","imaging","mri","cord","stability","asia","tlics","operative","recommendations","notes"],
- "cauda-equina":["age","sex","diagnosis","symptoms","motor","sensory","saddle","bladder","imaging","mri","operative","recommendations","notes"],
- "epidural-abscess":["age","sex","diagnosis","symptoms","fever","exam","motor","sensory","bladder","imaging","mri","bloodthinner","operative","recommendations","notes"],
- "shunt":["age","sex","diagnosis","shunt","symptoms","fever","exam","gcs","pupils","imaging","repeatct","recommendations","notes"],
- "evd":["age","sex","diagnosis","procedure","pod","symptoms","exam","gcs","pupils","icp","drain","imaging","repeatct","recommendations","notes"],
- "skull-fracture":["age","sex","mechanism","diagnosis","symptoms","exam","gcs","cranial","imaging","bloodthinner","operative","recommendations","notes"],
- "postop-cranial":["age","sex","procedure","pod","symptoms","exam","gcs","pupils","cranial","fever","wound","drain","imaging","repeatct","recommendations","notes"],
- "spine-postop":["age","sex","procedure","pod","symptoms","exam","motor","sensory","saddle","bladder","fever","wound","drain","imaging","mri","recommendations","notes"],
- "seizure":["age","sex","diagnosis","seizure","symptoms","exam","gcs","pupils","motor","imaging","bloodthinner","calculators","recommendations","notes"],
- "dex-taper":["age","sex","diagnosis","procedure","pod","symptoms","exam","gcs","motor","imaging","recommendations","notes"],
- "consult":COMM_DEFAULT,"floor":["age","sex","diagnosis","procedure","pod","symptoms","exam","gcs","pupils","motor","sensory","fever","wound","drain","notes"]
+const COMM_FIELDS = {
+  age: {
+    label: "Age",
+    placeholder: "74",
+    group: "identity",
+    type: "number",
+  },
+  sex: {
+    label: "Sex",
+    placeholder: "male",
+    group: "identity",
+    type: "select",
+    options: ["Female", "Male", "Other"],
+  },
+  mechanism: {
+    label: "Mechanism",
+    placeholder: "ground-level fall",
+    group: "context",
+  },
+  diagnosis: {
+    label: "Diagnosis",
+    placeholder: "acute SDH",
+    group: "identity",
+  },
+  procedure: {
+    label: "Procedure",
+    placeholder: "right craniotomy",
+    group: "identity",
+  },
+  pod: {
+    label: "Post-operative Day",
+    placeholder: "2",
+    group: "context",
+    type: "number",
+  },
+  symptoms: {
+    label: "Symptoms",
+    placeholder: "headache and confusion",
+    group: "context",
+  },
+  exam: {
+    label: "Neurologic Examination",
+    placeholder: "awake, follows commands, no drift",
+    group: "exam",
+  },
+  gcs: {
+    label: "GCS",
+    placeholder: "14",
+    group: "exam",
+    type: "number",
+    min: 3,
+    max: 15,
+  },
+  pupils: {
+    label: "Pupils",
+    placeholder: "Select pupil finding",
+    group: "exam",
+    type: "select",
+    options: ["Equal and reactive", "Anisocoric", "Fixed", "Other"],
+  },
+  motor: {
+    label: "Motor Strength",
+    placeholder: "5/5 throughout",
+    group: "exam",
+  },
+  sensory: {
+    label: "Sensory Findings",
+    placeholder: "intact to light touch",
+    group: "exam",
+  },
+  cranial: {
+    label: "Cranial Nerves",
+    placeholder: "no new cranial nerve deficit",
+    group: "exam",
+  },
+  imaging: {
+    label: "Imaging Findings",
+    placeholder: "acute right convexity SDH",
+    group: "imaging",
+  },
+  thickness: {
+    label: "Hematoma Thickness",
+    placeholder: "12",
+    group: "imaging",
+    type: "number",
+    unit: "mm",
+  },
+  shift: {
+    label: "Midline Shift",
+    placeholder: "6",
+    group: "imaging",
+    type: "number",
+    unit: "mm",
+  },
+  volume: {
+    label: "Hematoma Volume",
+    placeholder: "32",
+    group: "imaging",
+    type: "number",
+    unit: "mL",
+  },
+  hydrocephalus: {
+    label: "Hydrocephalus",
+    placeholder: "Select status",
+    group: "imaging",
+    type: "select",
+    options: ["Present", "Absent", "New", "Worsening", "Stable"],
+  },
+  ivh: {
+    label: "Intraventricular Hemorrhage",
+    placeholder: "Select status",
+    group: "imaging",
+    type: "select",
+    options: ["Present", "Absent", "New", "Worsening", "Stable"],
+  },
+  repeatct: {
+    label: "Repeat CT Results",
+    placeholder: "stable at 6 hours",
+    group: "imaging",
+  },
+  bloodthinner: {
+    // Note: Input cut off here in your snippet
+  },
 };
