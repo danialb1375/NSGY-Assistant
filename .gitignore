@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+
+# Editor temporary files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Local environment configuration
+.env
+.env.*
+!.env.example
+
+# Python (if development tooling is added later)
+.venv/
+__pycache__/
+*.py[cod]
+
+# Node.js (if development tooling is added later)
+node_modules/
+dist/
+coverage/
+
+# Logs
+*.log
