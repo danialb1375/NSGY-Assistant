@@ -1,3 +1,20 @@
-html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-button,a,summary,label,[role="button"]{touch-action:manipulation}
-@media(max-width:768px){input,select,textarea{font-size:16px!important}}
+html,
+body {
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+button,
+a,
+summary,
+label,
+[role="button"] {
+  touch-action: manipulation;
+}
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

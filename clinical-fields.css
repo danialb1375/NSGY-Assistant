@@ -1,3 +1,182 @@
 /* Clinical selectors are observations, not completed tasks. */
-.section-body .clinical-item{margin:4px -7px;border:1px solid transparent;border-radius:13px;padding:0 7px;transition:.16s}.section-body .clinical-item.selected{border-color:color-mix(in srgb,var(--accent,var(--teal)) 42%,transparent);background:color-mix(in srgb,var(--accent,var(--teal)) 9%,transparent)}.section-body .clinical-item.selected label{color:#f0f4f8}.section-body .clinical-item input:checked~span:last-child{text-decoration:none;color:inherit}.section-body .task-item input:checked~span:last-child{color:#778293;text-decoration:line-through}.recommendation-body li:before{display:none}.recommendation-body .clinical-item{padding:0 7px}.recommendation-body .clinical-item label{font-size:11px}
-.clinical-fields{border:1px solid rgba(61,214,186,.25);border-radius:20px;background:linear-gradient(145deg,rgba(61,214,186,.08),rgba(61,214,186,.025));margin-bottom:12px;overflow:hidden}.clinical-fields>summary{display:flex;align-items:center;gap:11px;min-height:66px;padding:12px 14px;list-style:none;cursor:pointer}.clinical-fields>summary::-webkit-details-marker{display:none}.clinical-fields>summary>span{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:rgba(61,214,186,.13);color:var(--teal);font-size:18px}.clinical-fields>summary>div{flex:1}.clinical-fields>summary strong,.clinical-fields>summary small{display:block}.clinical-fields>summary strong{font-size:13px}.clinical-fields>summary small{font-size:9px;color:#829b96;margin-top:4px}.clinical-fields>summary i{font-style:normal;color:#61756f;transition:.2s}.clinical-fields[open]>summary i{transform:rotate(180deg)}.clinical-fields-body{border-top:1px solid rgba(61,214,186,.15);padding:8px}.clinical-field{border:1px solid transparent;border-radius:15px;padding:10px;opacity:.66}.clinical-field+.clinical-field{margin-top:5px}.clinical-field.enabled{opacity:1;border-color:rgba(61,214,186,.3);background:rgba(61,214,186,.055)}.clinical-field>label{display:flex;align-items:center;gap:9px;min-height:28px;font-size:11px;color:#c4d0cd;cursor:pointer}.clinical-field>label input{position:absolute;opacity:0}.clinical-field>label .checkmark{width:22px;height:22px}.clinical-field>label input:checked+.checkmark{background:var(--teal);border-color:var(--teal);box-shadow:inset 0 0 0 4px #15201f}.clinical-field>select,.comm-field>select,.field-input-wrap input{width:100%;height:46px;border:1px solid #303949;background:#171d27;border-radius:12px;color:var(--text);padding:0 12px;font-size:13px;outline:none}.clinical-field>select,.clinical-field>.field-input-wrap{margin-top:9px}.clinical-field select:disabled,.clinical-field input:disabled,.comm-field select:disabled,.comm-field input:disabled{opacity:.35}.clinical-field select:focus,.clinical-field input:focus,.comm-field select:focus,.comm-field input:focus{border-color:var(--teal)}.field-input-wrap{position:relative}.field-input-wrap input{padding-right:55px}.field-input-wrap>span{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--muted);pointer-events:none}.comm-field>.field-input-wrap{margin:0}.comm-field>select{width:100%}.comm-field .field-input-wrap input:focus,.comm-field>select:focus{border-color:#a286da}
+.section-body .clinical-item {
+  margin: 4px -7px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  padding: 0 7px;
+  transition: 0.16s;
+}
+.section-body .clinical-item.selected {
+  border-color: color-mix(in srgb, var(--accent, var(--teal)) 42%, transparent);
+  background: color-mix(in srgb, var(--accent, var(--teal)) 9%, transparent);
+}
+.section-body .clinical-item.selected label {
+  color: #f0f4f8;
+}
+.section-body .clinical-item input:checked ~ span:last-child {
+  text-decoration: none;
+  color: inherit;
+}
+.section-body .task-item input:checked ~ span:last-child {
+  color: #778293;
+  text-decoration: line-through;
+}
+.recommendation-body li:before {
+  display: none;
+}
+.recommendation-body .clinical-item {
+  padding: 0 7px;
+}
+.recommendation-body .clinical-item label {
+  font-size: 11px;
+}
+.clinical-fields {
+  border: 1px solid rgba(61, 214, 186, 0.25);
+  border-radius: 20px;
+  background: linear-gradient(
+    145deg,
+    rgba(61, 214, 186, 0.08),
+    rgba(61, 214, 186, 0.025)
+  );
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.clinical-fields > summary {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 66px;
+  padding: 12px 14px;
+  list-style: none;
+  cursor: pointer;
+}
+.clinical-fields > summary::-webkit-details-marker {
+  display: none;
+}
+.clinical-fields > summary > span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(61, 214, 186, 0.13);
+  color: var(--teal);
+  font-size: 18px;
+}
+.clinical-fields > summary > div {
+  flex: 1;
+}
+.clinical-fields > summary strong,
+.clinical-fields > summary small {
+  display: block;
+}
+.clinical-fields > summary strong {
+  font-size: 13px;
+}
+.clinical-fields > summary small {
+  font-size: 9px;
+  color: #829b96;
+  margin-top: 4px;
+}
+.clinical-fields > summary i {
+  font-style: normal;
+  color: #61756f;
+  transition: 0.2s;
+}
+.clinical-fields[open] > summary i {
+  transform: rotate(180deg);
+}
+.clinical-fields-body {
+  border-top: 1px solid rgba(61, 214, 186, 0.15);
+  padding: 8px;
+}
+.clinical-field {
+  border: 1px solid transparent;
+  border-radius: 15px;
+  padding: 10px;
+  opacity: 0.66;
+}
+.clinical-field + .clinical-field {
+  margin-top: 5px;
+}
+.clinical-field.enabled {
+  opacity: 1;
+  border-color: rgba(61, 214, 186, 0.3);
+  background: rgba(61, 214, 186, 0.055);
+}
+.clinical-field > label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 28px;
+  font-size: 11px;
+  color: #c4d0cd;
+  cursor: pointer;
+}
+.clinical-field > label input {
+  position: absolute;
+  opacity: 0;
+}
+.clinical-field > label .checkmark {
+  width: 22px;
+  height: 22px;
+}
+.clinical-field > label input:checked + .checkmark {
+  background: var(--teal);
+  border-color: var(--teal);
+  box-shadow: inset 0 0 0 4px #15201f;
+}
+.clinical-field > select,
+.comm-field > select,
+.field-input-wrap input {
+  width: 100%;
+  height: 46px;
+  border: 1px solid #303949;
+  background: #171d27;
+  border-radius: 12px;
+  color: var(--text);
+  padding: 0 12px;
+  font-size: 13px;
+  outline: none;
+}
+.clinical-field > select,
+.clinical-field > .field-input-wrap {
+  margin-top: 9px;
+}
+.clinical-field select:disabled,
+.clinical-field input:disabled,
+.comm-field select:disabled,
+.comm-field input:disabled {
+  opacity: 0.35;
+}
+.clinical-field select:focus,
+.clinical-field input:focus,
+.comm-field select:focus,
+.comm-field input:focus {
+  border-color: var(--teal);
+}
+.field-input-wrap {
+  position: relative;
+}
+.field-input-wrap input {
+  padding-right: 55px;
+}
+.field-input-wrap > span {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.comm-field > .field-input-wrap {
+  margin: 0;
+}
+.comm-field > select {
+  width: 100%;
+}
+.comm-field .field-input-wrap input:focus,
+.comm-field > select:focus {
+  border-color: #a286da;
+}

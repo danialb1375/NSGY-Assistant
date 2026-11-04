@@ -23,9 +23,10 @@ const state = {
   communicationDrafts: {},
   activeCase: null,
 };
+
 const app = document.querySelector("#app");
 const allItems = Object.entries(DATA).flatMap(([section, items]) =>
-  items.map((item) => ({ ...item, section }))
+  items.map((item) => ({ ...item, section })),
 );
 const byId = Object.fromEntries(allItems.map((item) => [item.id, item]));
 
@@ -66,7 +67,7 @@ function escapeHTML(value = "") {
         ">": "&gt;",
         "'": "'",
         '"': "&quot;",
-      }[c])
+      })[c],
   );
 }
 
@@ -94,26 +95,26 @@ function fieldInput(
   key,
   value,
   scope = "clinical",
-  enabled = Boolean(value)
+  enabled = Boolean(value),
 ) {
   const attr = `data-${scope}-value="${key}"`,
     disabled = scope === "clinical" && !enabled ? "disabled" : "";
   if (field.type === "select") {
     return `<select ${attr} ${disabled}><option value="">${escapeHTML(
-      field.placeholder || "Select"
+      field.placeholder || "Select",
     )}</option>${field.options
       .map(
         (option) =>
           `<option ${value === option ? "selected" : ""}>${escapeHTML(
-            option
-          )}</option>`
+            option,
+          )}</option>`,
       )
       .join("")}</select>`;
   }
   return `<div class="field-input-wrap"><input ${attr} type="${
     field.type === "number" ? "number" : "text"
   }" value="${escapeHTML(value || "")}" placeholder="${escapeHTML(
-    field.placeholder || ""
+    field.placeholder || "",
   )}" ${field.min !== undefined ? `min="${field.min}"` : ""} ${
     field.max !== undefined ? `max="${field.max}"` : ""
   } ${disabled}>${
@@ -195,9 +196,9 @@ function chooseWizard(choice) {
 function goBack() {
   const prev = state.previous.pop();
   prev
-    ? (state.route = prev.route,
-      state.payload = prev.payload,
-      state.wizardTrail = prev.wizardTrail || [],
+    ? ((state.route = prev.route),
+      (state.payload = prev.payload),
+      (state.wizardTrail = prev.wizardTrail || []),
       render())
     : navigate("home", null, false);
 }
@@ -216,13 +217,13 @@ function conditionCard(item) {
     item.id
   }" style="--accent:${item.color}">
     <span class="condition-symbol"></span><div><h3>${escapeHTML(
-      item.title
+      item.title,
     )}</h3><p>${escapeHTML(item.meta)}</p></div>
     <button class="favorite mini ${
       favorite ? "on" : ""
     }" data-favorite="${item.id}" aria-label="${
-    favorite ? "Remove from" : "Add to"
-  } favorites">★</button><span class="row-chevron">›</span>
+      favorite ? "Remove from" : "Add to"
+    } favorites">★</button><span class="row-chevron">›</span>
   </article>`;
 }
 
@@ -244,8 +245,10 @@ function renderHome() {
   <section class="section"><div class="section-title"><span>Clinical workflows</span><small>Choose your setting</small></div>
     <div class="workflow-grid">${WORKFLOWS.map(
       (w) =>
-        `<button class="workflow-card" data-workflow="${w.id}"><span class="workflow-icon">${w.icon}</span><strong>${w.title}</strong><small>${w.subtitle}</small><i>›</i></button>`
-    ).join("")}<button class="workflow-card calculator-entry" data-nav="calculators"><span class="workflow-icon">▦</span><strong>Clinical Calculators</strong><small>Seven bedside scoring tools</small><i>›</i></button></div>
+        `<button class="workflow-card" data-workflow="${w.id}"><span class="workflow-icon">${w.icon}</span><strong>${w.title}</strong><small>${w.subtitle}</small><i>›</i></button>`,
+    ).join(
+      "",
+    )}<button class="workflow-card calculator-entry" data-nav="calculators"><span class="workflow-icon">▦</span><strong>Clinical Calculators</strong><small>Seven bedside scoring tools</small><i>›</i></button></div>
   </section>
   ${
     recent.length
@@ -265,7 +268,7 @@ function renderBreadcrumbs(includeCurrent = true) {
   return `<nav class="breadcrumbs" aria-label="Breadcrumb">${parts
     .map(
       (part, i) =>
-        `<button ${part.home ? "data-crumb-home" : `data-crumb="${i - 1}"`}>${escapeHTML(part.label)}</button>${i < parts.length - 1 ? "<span>›</span>" : ""}`
+        `<button ${part.home ? "data-crumb-home" : `data-crumb="${i - 1}"`}>${escapeHTML(part.label)}</button>${i < parts.length - 1 ? "<span>›</span>" : ""}`,
     )
     .join("")}</nav>`;
 }
@@ -275,14 +278,14 @@ function renderWizard(payload) {
     node = flow?.nodes[payload.nodeId];
   if (!node) return navigate("home", null, false);
   app.innerHTML = `<section class="wizard-page">${renderBreadcrumbs()}<div class="wizard-question"><span>${escapeHTML(
-    node.eyebrow || flow.title
+    node.eyebrow || flow.title,
   )}</span><h1>${escapeHTML(node.question)}</h1><p>Choose the best match.</p></div>
     <div class="answer-grid">${node.choices
       .map(
         (choice, index) =>
           `<button data-choice="${index}"><span>${escapeHTML(
-            choice.icon || "›"
-          )}</span><strong>${escapeHTML(choice.label)}</strong><i>›</i></button>`
+            choice.icon || "›",
+          )}</span><strong>${escapeHTML(choice.label)}</strong><i>›</i></button>`,
       )
       .join("")}</div>
     <button class="wizard-cancel" data-crumb-home>Cancel and return home</button></section>`;
@@ -316,7 +319,7 @@ function renderSearch() {
   app.innerHTML = `${pageHeader(
     "Find anything",
     "Search",
-    "Searches every title, question, medication, threshold, red flag and reference."
+    "Searches every title, question, medication, threshold, red flag and reference.",
   )}
     <label class="search-field"><span>⌕</span><input id="globalSearch" type="search" placeholder="Try “Keppra” or “midline shift”" autocomplete="off" autocapitalize="none"><button id="clearSearch" aria-label="Clear">×</button></label>
     <div id="searchResults"><div class="search-hint"><span>⌕</span><p>Type any term to search the complete clinical library.</p></div></div>`;
@@ -327,7 +330,7 @@ function calculatorCard(calc) {
   return `<button class="calculator-card" data-calculator="${calc.id}"><span>${
     calc.icon
   }</span><div><strong>${escapeHTML(calc.title)}</strong><small>${escapeHTML(
-    calc.description.split(".")[0]
+    calc.description.split(".")[0],
   )}.</small></div><i>›</i></button>`;
 }
 
@@ -335,9 +338,9 @@ function renderCalculatorCenter() {
   app.innerHTML = `${pageHeader(
     "Bedside tools",
     "Clinical Calculators",
-    "Immediate, offline scoring with no patient information retained."
+    "Immediate, offline scoring with no patient information retained.",
   )}<div class="calculator-list">${CALCULATORS.map(calculatorCard).join(
-    ""
+    "",
   )}</div><p class="calculator-safety">Scores support—not replace—clinical assessment, attending judgment, and local protocol.</p>`;
 }
 
@@ -346,7 +349,8 @@ function currentCalcValues(calc) {
   for (const field of calc.fields)
     if (values[field.key] === undefined)
       values[field.key] =
-        field.default ?? (field.type === "number" ? "" : field.options[0].value);
+        field.default ??
+        (field.type === "number" ? "" : field.options[0].value);
   calc.hydrate?.(values);
   CALC_STATE[calc.id] = values;
   return values;
@@ -359,20 +363,27 @@ const CALCULATOR_COMM_MAP = {
     sentence: (value) => `Estimated hematoma volume is ${value} mL.`,
   },
   ich: { sentence: (value) => `ICH Score is ${value}.` },
-  "hunt-hess": { field: "hunt", sentence: (value) => `Hunt-Hess grade ${value}.` },
+  "hunt-hess": {
+    field: "hunt",
+    sentence: (value) => `Hunt-Hess grade ${value}.`,
+  },
   "modified-fisher": {
     field: "fisher",
     sentence: (value) =>
       `Modified Fisher grade ${["0", "I", "II", "III", "IV"][+value] || value}.`,
   },
   tlics: { field: "tlics", sentence: (value) => `TLICS score is ${value}.` },
-  asia: { field: "asia", sentence: (value) => `ASIA impairment grade ${value}.` },
+  asia: {
+    field: "asia",
+    sentence: (value) => `ASIA impairment grade ${value}.`,
+  },
 };
 
 function syncCalculatorResult(calc) {
   const active = state.activeCase,
     result = calc.calculate(currentCalcValues(calc)),
-    valid = result.score !== "—" && result.score !== "" && result.score !== null;
+    valid =
+      result.score !== "—" && result.score !== "" && result.score !== null;
   if (!active || !calc.workflows.includes(active.id)) return;
   const draft = getCommDraft(active),
     mapping = CALCULATOR_COMM_MAP[calc.id] || {},
@@ -404,7 +415,10 @@ function syncCalculatorResult(calc) {
   }
   const records = Object.values(draft.calculatorResults);
   draft.values.calculators = records
-    .map((entry) => `${entry.label} ${entry.value}${entry.unit ? ` ${entry.unit}` : ""}`)
+    .map(
+      (entry) =>
+        `${entry.label} ${entry.value}${entry.unit ? ` ${entry.unit}` : ""}`,
+    )
     .join(", ");
   draft.enabled.calculators = records.length > 0;
 }
@@ -422,16 +436,19 @@ function clearCalculatorResult(id) {
   }
   const records = Object.values(draft.calculatorResults || {});
   draft.values.calculators = records
-    .map((entry) => `${entry.label} ${entry.value}${entry.unit ? ` ${entry.unit}` : ""}`)
+    .map(
+      (entry) =>
+        `${entry.label} ${entry.value}${entry.unit ? ` ${entry.unit}` : ""}`,
+    )
     .join(", ");
   draft.enabled.calculators = records.length > 0;
 }
 
 function calcResultHTML(result) {
   return `<span>${escapeHTML(result.label || "Current result")}</span><div><strong>${escapeHTML(
-    result.score
+    result.score,
   )}</strong>${result.unit ? `<b>${escapeHTML(result.unit)}</b>` : ""}</div><p>${escapeHTML(
-    result.interpretation || ""
+    result.interpretation || "",
   )}</p>${
     result.details?.length
       ? `<ul>${result.details.map((line) => `<li>${escapeHTML(line)}</li>`).join("")}</ul>`
@@ -449,13 +466,13 @@ function renderCalculator(id) {
         ? state.activeCase
         : null;
   app.innerHTML = `<article class="calculator-page"><div class="calc-heading"><span>Clinical calculator</span><h1>${escapeHTML(
-    calc.title
+    calc.title,
   )}</h1><p>${escapeHTML(calc.description)}</p></div><div class="calc-result">${calcResultHTML(
-    result
+    result,
   )}</div>${
     active
       ? `<div class="calc-comm-preview"><span>Doctor communication · active case</span><p id="calculatorCommunicationPreview">${escapeHTML(
-          buildSummary(active)
+          buildSummary(active),
         )}</p></div>`
       : ""
   }<form id="calculatorForm">${renderCalculatorForm(calc)}</form><button class="reset-calculator" data-reset-calculator="${
@@ -472,7 +489,7 @@ function runSearch(query) {
   }
   const terms = q.split(/\s+/);
   const matches = allItems.filter((item) =>
-    terms.every((term) => searchable(item).includes(term))
+    terms.every((term) => searchable(item).includes(term)),
   );
   target.innerHTML = `<div class="result-count">${matches.length} ${
     matches.length === 1 ? "result" : "results"
@@ -487,15 +504,15 @@ function renderContacts() {
   app.innerHTML = `${pageHeader(
     "Settings",
     "Contacts",
-    "Saved only on this device. Contacts are used for Call and Text handoffs."
+    "Saved only on this device. Contacts are used for Call and Text handoffs.",
   )}<div class="contacts-list">${
     state.contacts.length
       ? state.contacts
           .map(
             (contact, index) =>
               `<article><div><strong>${escapeHTML(contact.name)}</strong><small>${escapeHTML(
-                contact.phone
-              )}</small></div><button data-edit-contact="${index}">Edit</button><button class="delete" data-delete-contact="${index}">Delete</button></article>`
+                contact.phone,
+              )}</small></div><button data-edit-contact="${index}">Edit</button><button class="delete" data-delete-contact="${index}">Delete</button></article>`,
           )
           .join("")
       : `<div class="empty compact"><span>♙</span><h2>No contacts saved</h2><p>Add an attending to use one-tap Call and Text.</p></div>`
@@ -510,13 +527,13 @@ function renderContactEditor(index) {
   app.innerHTML = `${pageHeader(
     "Contacts",
     index === null ? "Add Contact" : "Edit Contact",
-    "This information never leaves this device."
+    "This information never leaves this device.",
   )}<form class="contact-form" id="contactForm" data-index="${
     index === null ? "" : index
   }"><label>Name<input name="name" required autocomplete="name" value="${escapeHTML(
-    contact?.name || ""
+    contact?.name || "",
   )}" placeholder="Attending name"></label><label>Phone Number<input name="phone" required inputmode="tel" autocomplete="tel" value="${escapeHTML(
-    contact?.phone || ""
+    contact?.phone || "",
   )}" placeholder="(555) 555-5555"></label><button type="submit">Save Contact</button></form>`;
 }
 
@@ -524,7 +541,7 @@ function communicationDefaults(id, focus) {
   const item = byId[id],
     values = { diagnosis: focus || item.title };
   const calcParts = CALCULATORS.filter(
-    (calc) => calc.workflows.includes(id) && CALC_STATE[calc.id]
+    (calc) => calc.workflows.includes(id) && CALC_STATE[calc.id],
   ).map((calc) => {
     const result = calc.calculate(currentCalcValues(calc));
     return `${calc.short} ${result.score}${
@@ -542,7 +559,7 @@ function communicationDefaults(id, focus) {
         "Craniotomy",
         "VP Shunt",
         "Craniectomy",
-      ].includes(part.label)
+      ].includes(part.label),
   );
   if (procedure) values.procedure = procedure.label;
   return values;
@@ -558,7 +575,9 @@ function getCommDraft(payload) {
       []
     ).join(">"),
     key = `${payload.id}:${payload.focus || ""}:${pathKey}`;
-  let draft = activeMatch ? state.activeCase.draft : state.communicationDrafts[key];
+  let draft = activeMatch
+    ? state.activeCase.draft
+    : state.communicationDrafts[key];
   if (!draft) {
     const configured = COMM_WORKFLOWS[payload.id] || COMM_DEFAULT,
       keys = configured.includes("findings")
@@ -586,8 +605,8 @@ function wizardContext(payload) {
     modifier = choices.includes("Traumatic")
       ? "traumatic"
       : choices.includes("Spontaneous")
-      ? "spontaneous"
-      : "";
+        ? "spontaneous"
+        : "";
   const sourceText =
     {
       "Emergency Department": "ED consult",
@@ -617,7 +636,7 @@ function demographicsPanel(payload) {
     age = String(draft.values.age || ""),
     sex = String(draft.values.sex || "").toLowerCase();
   return `<section class="demographics"><div><label for="patientAge">Age</label><input id="patientAge" data-demographic-age type="number" inputmode="numeric" min="0" max="125" value="${escapeHTML(
-    age
+    age,
   )}" placeholder="—"></div><fieldset><legend>Sex</legend><button type="button" data-demographic-sex="male" class="${
     sex === "male" ? "selected" : ""
   }">M</button><button type="button" data-demographic-sex="female" class="${
@@ -633,12 +652,14 @@ function selectedValue(draft, key) {
   let value = readValue(key);
   if (key === "imaging") {
     const additions = [
-      readValue("hydrocephalus") && `hydrocephalus ${readValue("hydrocephalus")}`,
+      readValue("hydrocephalus") &&
+        `hydrocephalus ${readValue("hydrocephalus")}`,
       readValue("ivh") && `IVH ${readValue("ivh")}`,
     ].filter(Boolean);
     value = [value, ...additions].filter(Boolean).join("; ");
   }
-  if (key === "notes") value = [readValue("findings"), value].filter(Boolean).join("; ");
+  if (key === "notes")
+    value = [readValue("findings"), value].filter(Boolean).join("; ");
   if (!value) return "";
   const unit = COMM_FIELDS[key]?.unit;
   return unit && !value.toLowerCase().endsWith(unit.toLowerCase())
@@ -651,7 +672,8 @@ function buildSummary(payload) {
     v = (k) => selectedValue(d, k),
     sent = [];
   let lead = "";
-  if (v("age") && v("sex")) lead = `I’m calling about a ${v("age")}-year-old ${v("sex")}`;
+  if (v("age") && v("sex"))
+    lead = `I’m calling about a ${v("age")}-year-old ${v("sex")}`;
   else if (v("age")) lead = `I’m calling about a ${v("age")}-year-old patient`;
   else if (v("sex")) lead = `I’m calling about a ${v("sex")} patient`;
   else lead = "I’m calling about a patient";
@@ -703,7 +725,8 @@ function buildSummary(payload) {
     v("tlics") && `TLICS ${v("tlics")}`,
     v("operative") && `operative criteria: ${v("operative")}`,
   ].filter(Boolean);
-  if (management.length) sent.push(`Additional key data: ${management.join("; ")}.`);
+  if (management.length)
+    sent.push(`Additional key data: ${management.join("; ")}.`);
   if (v("recommendations"))
     sent.push(`The proposed neurosurgical plan is ${v("recommendations")}.`);
   if (v("notes")) sent.push(v("notes").replace(/[.!?]$/, "") + ".");
@@ -724,10 +747,10 @@ function buildSummary(payload) {
       age && sex
         ? `a ${age}-year-old ${sex}`
         : age
-        ? `a ${age}-year-old patient`
-        : sex
-        ? `a ${sex} patient`
-        : "";
+          ? `a ${age}-year-old patient`
+          : sex
+            ? `a ${sex} patient`
+            : "";
   let lead = "";
 
   if (context.source) {
@@ -757,7 +780,7 @@ function buildSummary(payload) {
     sent.push(
       lead
         .replace(/^./, (letter) => letter.toUpperCase())
-        .replace(/[.!?]?$/, ".")
+        .replace(/[.!?]?$/, "."),
     );
   }
 
@@ -822,12 +845,14 @@ function buildSummary(payload) {
     sent.push(
       v("bloodthinner").toLowerCase() === "none"
         ? "The patient is not taking anticoagulation or antiplatelet therapy."
-        : `The patient is taking ${v("bloodthinner")}.`
+        : `The patient is taking ${v("bloodthinner")}.`,
     );
   }
 
   if (v("reversal")) {
-    sent.push(`${v("reversal").replace(/^./, (letter) => letter.toUpperCase())}.`);
+    sent.push(
+      `${v("reversal").replace(/^./, (letter) => letter.toUpperCase())}.`,
+    );
   }
 
   if (hasCalc("tlics")) sent.push(calculated.tlics.sentence);
@@ -863,9 +888,9 @@ function renderCommunication(payload) {
   app.innerHTML = `<article class="communication-page">${pageHeader(
     item.title,
     "Build Communication",
-    "Choose what to include. Empty fields are always omitted."
+    "Choose what to include. Empty fields are always omitted.",
   )}<div class="comm-preview"><span>Live preview</span><p id="summaryPreview">${escapeHTML(
-    summary
+    summary,
   )}</p></div>${demographicsPanel(payload)}<details class="clinical-fields communication-details"><summary><span>＋</span><div><strong>Case Details & Clinical Findings</strong><small>Tap to select additional information</small></div><i>⌄</i></summary><div class="clinical-fields-body"><div class="comm-fields">${detailKeys
     .map((key) => {
       const field = COMM_FIELDS[key];
@@ -877,11 +902,11 @@ function renderCommunication(payload) {
         field,
         key,
         draft.values[key] || "",
-        "comm"
+        "comm",
       )}</div>`;
     })
     .join(
-      ""
+      "",
     )}</div></div></details><section class="comm-actions"><button data-comm-action="call"><span>☎</span>Call</button><button data-comm-action="text"><span>▣</span>Text</button><button data-copy-communication><span>▤</span>Copy Summary</button></section><p class="privacy-note">Draft details stay in memory only and are cleared when the app closes.</p></article>`;
 
   document
@@ -900,24 +925,24 @@ function renderContactPicker(payload) {
       ? state.useShortcut
         ? "Select a contact to open the configured Shortcut with the recipient and summary."
         : "The summary will be copied, then Messages will open to the selected contact. Paste and review before sending."
-      : "Select a saved contact to open the phone dialer."
+      : "Select a saved contact to open the phone dialer.",
   )}<div class="contact-picker">${state.contacts
     .map(
       (contact, index) =>
         `<button data-contact-choice="${index}"><span>${escapeHTML(
-          contact.name.slice(0, 1).toUpperCase()
+          contact.name.slice(0, 1).toUpperCase(),
         )}</span><div><strong>${escapeHTML(
-          contact.name
+          contact.name,
         )}</strong><small>${escapeHTML(
-          contact.phone
-        )}</small></div><i>›</i></button>`
+          contact.phone,
+        )}</small></div><i>›</i></button>`,
     )
     .join("")}</div>${
     !state.contacts.length
       ? `<div class="empty compact"><h2>No contacts saved</h2><p>Add an attending first.</p><button data-nav="contacts">Open Contacts</button></div>`
       : ""
   }<div class="summary-mini"><span>Message preview</span><p>${escapeHTML(
-    summary
+    summary,
   )}</p></div>`;
 }
 
@@ -943,7 +968,7 @@ function clinicalFieldsPanel(payload) {
       }"><label><input type="checkbox" data-clinical-field-check="${key}" ${
         enabled ? "checked" : ""
       }><span class="checkmark"></span><strong>${escapeHTML(
-        field.label
+        field.label,
       )}</strong></label>${fieldInput(field, key, draft.values[key] || "")}</div>`;
     })
     .join("")}</div></details>`;
@@ -952,7 +977,8 @@ function clinicalFieldsPanel(payload) {
 function referenceItems(items) {
   return items
     .map(
-      (raw) => `<li>${escapeHTML(typeof raw === "string" ? raw : raw.text)}</li>`
+      (raw) =>
+        `<li>${escapeHTML(typeof raw === "string" ? raw : raw.text)}</li>`,
     )
     .join("");
 }
@@ -962,7 +988,7 @@ function listBlock(title, items, type, item) {
   return `<details class="detail-section ${type}" open><summary><span class="section-icon">${
     type === "danger" ? "!" : type === "manage" ? "→" : "✓"
   }</span><strong>${title}</strong><span class="disclosure">⌄</span></summary><div class="section-body"><ul class="reference-list">${referenceItems(
-    items
+    items,
   )}</ul></div></details>`;
 }
 
@@ -981,7 +1007,8 @@ function renderDetail(payload) {
       state.activeCase?.id === id &&
       state.activeCase?.focus === (focus || null) &&
       samePath;
-  if (!sameCase) state.activeCase = { id, focus: focus || null, path, draft: null };
+  if (!sameCase)
+    state.activeCase = { id, focus: focus || null, path, draft: null };
   state.recent = [id, ...state.recent.filter((x) => x !== id)].slice(0, 20);
   save(STORAGE.recent, state.recent);
   const favorite = state.favorites.includes(id);
@@ -989,11 +1016,11 @@ function renderDetail(payload) {
     ? (item.branches || []).filter(
         (branch) =>
           branch.tag === focus ||
-          branch.tag.toLowerCase().includes("seizure prophylaxis")
+          branch.tag.toLowerCase().includes("seizure prophylaxis"),
       )
     : item.branches || [];
   const relatedCalculators = CALCULATORS.filter((calc) =>
-    calc.workflows.includes(item.id)
+    calc.workflows.includes(item.id),
   );
   const recommendation = RECOMMENDATIONS[item.id],
     recommendationItems = recommendation
@@ -1002,14 +1029,14 @@ function renderDetail(payload) {
   app.innerHTML = `<article class="detail" style="--accent:${item.color}">
     ${typeof payload === "object" && payload.wizard ? renderBreadcrumbs() : ""}
     <div class="detail-head"><span class="detail-category">${escapeHTML(
-      item.section
+      item.section,
     )} · clinical workflow</span><div class="title-row"><h1>${escapeHTML(
-    item.title
-  )}</h1><button class="favorite ${
-    favorite ? "on" : ""
-  }" data-favorite="${id}" aria-label="${
-    favorite ? "Remove from" : "Add to"
-  } favorites">★</button></div><p>${escapeHTML(item.meta)}</p></div>
+      item.title,
+    )}</h1><button class="favorite ${
+      favorite ? "on" : ""
+    }" data-favorite="${id}" aria-label="${
+      favorite ? "Remove from" : "Add to"
+    } favorites">★</button></div><p>${escapeHTML(item.meta)}</p></div>
     <div class="quick-strip" aria-label="Quick actions"><button data-jump="gather">Before you call</button><button data-jump="danger">Red flags</button><button data-jump="script">Present</button></div>
     ${demographicsPanel({ id, focus })}
     ${clinicalFieldsPanel({ id, focus })}
@@ -1020,7 +1047,7 @@ function renderDetail(payload) {
               (calc) =>
                 `<button data-calculator="${calc.id}"><span>${
                   calc.icon
-                }</span>${escapeHTML(calc.short)}<i>›</i></button>`
+                }</span>${escapeHTML(calc.short)}<i>›</i></button>`,
             )
             .join("")}</div></section>`
         : ""
@@ -1028,7 +1055,7 @@ function renderDetail(payload) {
     ${
       recommendation
         ? `<details class="recommendations" open><summary><span>☎</span><div><strong>Common NSGY Recommendations</strong><small>Clinical memory aids · not standing orders</small></div><i>⌄</i></summary><div class="recommendation-body"><ul class="reference-list">${referenceItems(
-            recommendationItems
+            recommendationItems,
           )}</ul><p>${escapeHTML(recommendation.source)}</p></div></details>`
         : ""
     }
@@ -1039,10 +1066,10 @@ function renderDetail(payload) {
           `<details class="detail-section branch" open><summary><span class="section-icon">${
             n + 1
           }</span><strong>${escapeHTML(
-            b.tag
+            b.tag,
           )}</strong><span class="disclosure">⌄</span></summary><div class="section-body"><ul class="reference-list">${referenceItems(
-            b.content
-          )}</ul></div></details>`
+            b.content,
+          )}</ul></div></details>`,
       )
       .join("")}
     ${listBlock("Medical Management", item.medmanagement, "manage", item)}
@@ -1054,7 +1081,7 @@ function renderDetail(payload) {
               (t) =>
                 `<div class="triage-row ${t.type}"><span>${
                   t.type === "home" ? "PHONE" : "DRIVE IN"
-                }</span><p>${escapeHTML(t.text)}</p></div>`
+                }</span><p>${escapeHTML(t.text)}</p></div>`,
             )
             .join("")}</div></details>`
         : ""
@@ -1062,14 +1089,14 @@ function renderDetail(payload) {
     ${
       item.script
         ? `<section class="presentation" id="script"><div><span>Presentation Script</span><button data-copy="${id}">Copy</button></div><p>“${escapeHTML(
-            item.script
+            item.script,
           )}”</p></section>`
         : ""
     }
     ${
       item.source
         ? `<details class="reference"><summary>Reference & source <span>⌄</span></summary><p>${escapeHTML(
-            item.source
+            item.source,
           )}</p></details>`
         : ""
     }
@@ -1082,7 +1109,9 @@ function render() {
   document.querySelector("#backButton").hidden = state.route === "home";
   document
     .querySelectorAll(".tabbar button")
-    .forEach((b) => b.classList.toggle("active", b.dataset.route === state.route));
+    .forEach((b) =>
+      b.classList.toggle("active", b.dataset.route === state.route),
+    );
   if (state.route === "home") renderHome();
   else if (state.route === "wizard") renderWizard(state.payload);
   else if (state.route === "detail") renderDetail(state.payload);
@@ -1110,7 +1139,10 @@ document.addEventListener("click", (event) => {
       .closest("fieldset")
       .querySelectorAll("[data-demographic-sex]")
       .forEach((button) =>
-        button.classList.toggle("selected", !selected && button === demographicSex)
+        button.classList.toggle(
+          "selected",
+          !selected && button === demographicSex,
+        ),
       );
     const preview = document.querySelector("#summaryPreview");
     if (preview) preview.textContent = buildSummary(payload);
@@ -1145,7 +1177,10 @@ document.addEventListener("click", (event) => {
       detail = active
         ? { id: active.id, focus: active.focus, path: active.path }
         : {
-            id: typeof state.payload === "string" ? state.payload : state.payload.id,
+            id:
+              typeof state.payload === "string"
+                ? state.payload
+                : state.payload.id,
             focus: state.payload?.focus || null,
             path: [],
           };
@@ -1198,7 +1233,7 @@ document.addEventListener("click", (event) => {
     } else if (state.useShortcut) {
       const payload = JSON.stringify({ phone: number, message: summary });
       window.location.href = `shortcuts://run-shortcut?name=NSGY%20Call%20Message&input=text&text=${encodeURIComponent(
-        payload
+        payload,
       )}`;
     } else {
       copyText(summary).then(() => {
@@ -1216,7 +1251,11 @@ document.addEventListener("click", (event) => {
   }
   const calcOption = event.target.closest("[data-calc-option]");
   if (calcOption) {
-    setCalcValue(state.payload, calcOption.dataset.calcOption, calcOption.dataset.value);
+    setCalcValue(
+      state.payload,
+      calcOption.dataset.calcOption,
+      calcOption.dataset.value,
+    );
     const calc = CALCULATORS.find((item) => item.id === state.payload);
     syncCalculatorResult(calc);
     renderCalculator(state.payload);
@@ -1253,7 +1292,7 @@ document.addEventListener("click", (event) => {
   const crumb = event.target.closest("[data-crumb]");
   if (crumb) {
     const index = Number(crumb.dataset.crumb);
-    state.wizardTrail = state.wizardTrail.slice(0, index+1);
+    state.wizardTrail = state.wizardTrail.slice(0, index + 1);
     const target = state.wizardTrail[index];
     navigate("wizard", {
       flowId:
@@ -1278,9 +1317,9 @@ document.addEventListener("click", (event) => {
   }
   const copy = event.target.closest("[data-copy]");
   if (copy) {
-    navigator.clipboard?.writeText(byId[copy.dataset.copy].script).then(() =>
-      toast("Presentation copied")
-    );
+    navigator.clipboard
+      ?.writeText(byId[copy.dataset.copy].script)
+      .then(() => toast("Presentation copied"));
     return;
   }
   if (event.target.id === "clearSearch") {
@@ -1304,14 +1343,19 @@ document.addEventListener("input", (event) => {
   if (event.target.id === "globalSearch") runSearch(event.target.value);
 
   if (event.target.matches("[data-calc-number]")) {
-    setCalcValue(state.payload, event.target.dataset.calcNumber, event.target.value);
+    setCalcValue(
+      state.payload,
+      event.target.dataset.calcNumber,
+      event.target.value,
+    );
     const calc = CALCULATORS.find((item) => item.id === state.payload);
     syncCalculatorResult(calc);
     document.querySelector(".calc-result").innerHTML = calcResultHTML(
-      calc.calculate(currentCalcValues(calc))
+      calc.calculate(currentCalcValues(calc)),
     );
     const preview = document.querySelector("#calculatorCommunicationPreview");
-    if (preview && state.activeCase) preview.textContent = buildSummary(state.activeCase);
+    if (preview && state.activeCase)
+      preview.textContent = buildSummary(state.activeCase);
   }
 
   if (event.target.matches("[data-clinical-field-check]")) {
@@ -1344,13 +1388,17 @@ document.addEventListener("input", (event) => {
       input = row.querySelector("[data-comm-value]");
     row.classList.toggle("enabled", event.target.checked);
     input.disabled = !event.target.checked;
-    document.querySelector("#summaryPreview").textContent = buildSummary(state.payload);
+    document.querySelector("#summaryPreview").textContent = buildSummary(
+      state.payload,
+    );
   }
 
   if (event.target.matches("[data-comm-value]")) {
     const draft = getCommDraft(state.payload);
     draft.values[event.target.dataset.commValue] = event.target.value;
-    document.querySelector("#summaryPreview").textContent = buildSummary(state.payload);
+    document.querySelector("#summaryPreview").textContent = buildSummary(
+      state.payload,
+    );
   }
 
   if (event.target.id === "shortcutToggle") {
@@ -1360,9 +1408,15 @@ document.addEventListener("input", (event) => {
 });
 
 document.querySelector("#backButton").addEventListener("click", goBack);
-document.querySelector("#homeButton").addEventListener("click", () => navigate("home"));
-document.querySelector("#searchButton").addEventListener("click", () => navigate("search"));
-document.querySelector("#contactsButton").addEventListener("click", () => navigate("contacts"));
+document
+  .querySelector("#homeButton")
+  .addEventListener("click", () => navigate("home"));
+document
+  .querySelector("#searchButton")
+  .addEventListener("click", () => navigate("search"));
+document
+  .querySelector("#contactsButton")
+  .addEventListener("click", () => navigate("contacts"));
 
 document.addEventListener("submit", (event) => {
   if (event.target.id !== "contactForm") return;
@@ -1403,11 +1457,13 @@ document.addEventListener(
   (event) => {
     if (event.touches.length > 1) event.preventDefault();
   },
-  { passive: false }
+  { passive: false },
 );
 
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
+  window.addEventListener("load", () =>
+    navigator.serviceWorker.register("sw.js"),
+  );
 }
 
 render();

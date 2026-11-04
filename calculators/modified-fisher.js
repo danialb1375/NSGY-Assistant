@@ -32,10 +32,16 @@ registerCalculator({
   calculate(v) {
     const grade =
         v.sah === "none"
-          ? +v.ivh ? 2 : 0
+          ? +v.ivh
+            ? 2
+            : 0
           : v.sah === "thin"
-          ? +v.ivh ? 2 : 1
-          : +v.ivh ? 4 : 3,
+            ? +v.ivh
+              ? 2
+              : 1
+            : +v.ivh
+              ? 4
+              : 3,
       risk = [
         "Reference group (no SAH or IVH)",
         "Lower relative risk",

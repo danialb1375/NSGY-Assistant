@@ -61,8 +61,8 @@ registerCalculator({
         total <= 3
           ? "Usually managed non-operatively."
           : total === 4
-          ? "Borderline; operative or non-operative treatment is individualized."
-          : "Operative management is generally recommended.";
+            ? "Borderline; operative or non-operative treatment is individualized."
+            : "Operative management is generally recommended.";
 
     return {
       score: total,

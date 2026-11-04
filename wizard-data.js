@@ -1,4 +1,4 @@
-/**
+/*
  * Smart Call Wizard configuration.
  * Add or edit nodes here; the navigation engine in app.js does not need changes.
  * A node either asks a question with choices, or routes to an existing content ID.
@@ -35,8 +35,18 @@ const WIZARD_FLOWS = [
         question: "What type?",
         eyebrow: "Traumatic Head Bleed",
         choices: [
-          { label: "SDH", icon: "S", target: "traumatic-bleed", focus: "Acute SDH" },
-          { label: "EDH", icon: "E", target: "traumatic-bleed", focus: "Acute EDH" },
+          {
+            label: "SDH",
+            icon: "S",
+            target: "traumatic-bleed",
+            focus: "Acute SDH",
+          },
+          {
+            label: "EDH",
+            icon: "E",
+            target: "traumatic-bleed",
+            focus: "Acute EDH",
+          },
           { label: "tSAH", icon: "A", target: "traumatic-bleed" },
           { label: "Contusion", icon: "C", target: "traumatic-bleed" },
         ],
@@ -147,7 +157,11 @@ const WIZARD_FLOWS = [
           { label: "Drain", icon: "↕", target: "postop-cranial" },
           { label: "Headache", icon: "+", target: "postop-cranial" },
           { label: "Seizure", icon: "⌁", target: "seizure" },
-          { label: "Altered Mental Status", icon: "!", target: "postop-cranial" },
+          {
+            label: "Altered Mental Status",
+            icon: "!",
+            target: "postop-cranial",
+          },
           { label: "Other", icon: "…", target: "postop-cranial" },
         ],
       },
@@ -193,7 +207,7 @@ const WIZARD_FLOWS = [
           { label: "Head Bleed", icon: "◉", next: "transfer-bleed" },
           { label: "Spine Trauma", icon: "↯", target: "spine-trauma" },
           { label: "Cauda Equina", icon: "!", target: "cauda-equina" },
-          { label: "Epidural Abscess", icon: "●", target: "epidural-accsess" }, // Note: fixed potential target mismatch if 'epidural-abscess' matches spine flow
+          { label: "Epidural Abscess", icon: "●", target: "epidural-abscess" },
           { label: "Shunt", icon: "⎋", target: "shunt" },
           { label: "Other", icon: "…", target: "consult" },
         ],

@@ -55,7 +55,8 @@ registerCalculator({
   ],
   hydrate(v) {
     if (!v.gcs && CALC_CONTEXT.gcs) v.gcs = CALC_CONTEXT.gcs;
-    if (!v.volume && CALC_CONTEXT.volume) v.volume = CALC_CONTEXT.volume.toFixed(1);
+    if (!v.volume && CALC_CONTEXT.volume)
+      v.volume = CALC_CONTEXT.volume.toFixed(1);
   },
   calculate(v) {
     const g = +v.gcs,

@@ -1,1 +1,61 @@
-.reference-list{list-style:none!important;margin:0;padding:0}.reference-list li{position:relative;padding:13px 3px 13px 18px;font-size:13px;line-height:1.55;color:#dbe0e8;border-bottom:1px solid rgba(255,255,255,.055)}.reference-list li:last-child{border-bottom:0}.reference-list li::before{content:"";position:absolute;left:3px;top:21px;width:6px;height:6px;border-radius:50%;background:var(--accent,var(--teal));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,var(--teal)) 12%,transparent)}.recommendation-body .reference-list li{font-size:11px;padding:11px 3px 11px 18px}.recommendation-body .reference-list li::before{top:17px;background:#6f9df5}.calc-comm-preview{border:1px solid rgba(155,127,212,.3);background:linear-gradient(145deg,rgba(155,127,212,.12),rgba(155,127,212,.035));border-radius:18px;padding:13px;margin:0 0 14px}.calc-comm-preview span{font-size:9px;color:#b69ddd;font-weight:800;text-transform:uppercase;letter-spacing:.1em}.calc-comm-preview p{font-family:ui-serif,Georgia,serif;color:#e2dced;font-size:11px;line-height:1.55;margin:7px 0 0}
+.reference-list {
+  list-style: none !important;
+  margin: 0;
+  padding: 0;
+}
+.reference-list li {
+  position: relative;
+  padding: 13px 3px 13px 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #dbe0e8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+.reference-list li:last-child {
+  border-bottom: 0;
+}
+.reference-list li::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 21px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent, var(--teal));
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--accent, var(--teal)) 12%, transparent);
+}
+.recommendation-body .reference-list li {
+  font-size: 11px;
+  padding: 11px 3px 11px 18px;
+}
+.recommendation-body .reference-list li::before {
+  top: 17px;
+  background: #6f9df5;
+}
+.calc-comm-preview {
+  border: 1px solid rgba(155, 127, 212, 0.3);
+  background: linear-gradient(
+    145deg,
+    rgba(155, 127, 212, 0.12),
+    rgba(155, 127, 212, 0.035)
+  );
+  border-radius: 18px;
+  padding: 13px;
+  margin: 0 0 14px;
+}
+.calc-comm-preview span {
+  font-size: 9px;
+  color: #b69ddd;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.calc-comm-preview p {
+  font-family: ui-serif, Georgia, serif;
+  color: #e2dced;
+  font-size: 11px;
+  line-height: 1.55;
+  margin: 7px 0 0;
+}
