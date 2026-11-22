@@ -3,7 +3,7 @@
  * Add or edit nodes here; the navigation engine in app.js does not need changes.
  * A node either asks a question with choices, or routes to an existing content ID.
  */
-const WIZARD_FLOWS = [
+export const WIZARD_FLOWS = [
   {
     id: "ed",
     icon: "✚",

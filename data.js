@@ -1,4 +1,4 @@
-const DATA = {
+export const DATA = {
   cranial: [
     {
       id: "ich-spontaneous",

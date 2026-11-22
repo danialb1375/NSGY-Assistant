@@ -1,3 +1,8 @@
+import { registerCalculator } from "./core.js";
+import { calculateTLICS } from "./tlics_math.js";
+import { normalizeNumber } from "../utils.js";
+
+//Register TLICS calculator and object
 registerCalculator({
   id: "tlics",
   icon: "⌁",
@@ -56,20 +61,43 @@ registerCalculator({
     },
   ],
   calculate(v) {
-    const total = +v.morph + +v.plc + +v.neuro + +v.modifier,
-      meaning =
-        total <= 3
-          ? "Usually managed non-operatively."
-          : total === 4
-            ? "Borderline; operative or non-operative treatment is individualized."
-            : "Operative management is generally recommended.";
+    //Convert UI inputs into numerical values
+    const inputs = Object.fromEntries(
+      Object.entries(v).map(([key, value]) => [key, normalizeNumber(value)]),
+    );
+
+    //Call calculateTLICS
+    const result = calculateTLICS(inputs);
+
+    //Handle invalid (null) result
+    if (!result) {
+      return {
+        score: "—",
+        label: "TLICS total",
+        interpretation: "Please provide valid scoring inputs.",
+        details: [],
+      };
+    }
+    //Translate classification into interpretation
+    const interpretations = {
+      nonoperative:
+        "Managed non-operatively with bracing, pain control and activity modification",
+      borderline:
+        "Surgeon discretion - surgical treatment may be individualized",
+      operative:
+        "Operative management is recommended due to unstable fracture morphology",
+    };
+
+    const interpretation =
+      interpretations[result.classification] ??
+      "Unable to determine interpretation to provide recommendation";
 
     return {
-      score: total,
+      score: result.score,
       label: "TLICS total",
-      interpretation: meaning,
+      interpretation,
       details: [
-        `Morphology ${+v.morph} · PLC ${+v.plc} · Neurologic status ${+v.neuro} · Compression modifier ${+v.modifier}`,
+        `Morphology ${result.morph} · PLC ${result.plc} · Neurologic status ${result.neuro} · Compression modifier ${result.modifier}`,
         "Used to structure thoracolumbar injury assessment and support treatment discussion.",
       ],
       note: "TLICS complements—not replaces—the complete examination, imaging review, patient factors, and spine-surgeon judgment.",

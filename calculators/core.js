@@ -1,21 +1,23 @@
-const CALCULATORS = [];
-const CALC_STATE = {};
-const CALC_CONTEXT = { gcs: null, volume: null };
+import { escapeHTML } from "../utils.js";
 
-function registerCalculator(definition) {
+export const CALCULATORS = [];
+export const CALC_STATE = {};
+export const CALC_CONTEXT = { gcs: null, volume: null };
+
+export function registerCalculator(definition) {
   CALCULATORS.push(definition);
 }
 
-function calcValue(id, key, fallback = null) {
+export function calcValue(id, key, fallback = null) {
   return CALC_STATE[id]?.[key] ?? fallback;
 }
 
-function setCalcValue(id, key, value) {
+export function setCalcValue(id, key, value) {
   CALC_STATE[id] ??= {};
   CALC_STATE[id][key] = value;
 }
 
-function optionField(calc, field) {
+export function optionField(calc, field) {
   const selected = String(
     calcValue(calc.id, field.key, field.default ?? field.options[0].value),
   );
@@ -38,7 +40,7 @@ function optionField(calc, field) {
     .join("")}</div></fieldset>`;
 }
 
-function numberField(calc, field) {
+export function numberField(calc, field) {
   const value = calcValue(calc.id, field.key, field.default ?? "");
 
   return `<label class="number-field"><span>${escapeHTML(field.label)}${
@@ -52,7 +54,7 @@ function numberField(calc, field) {
   )}" placeholder="${escapeHTML(field.placeholder || "")}"></label>`;
 }
 
-function renderCalculatorForm(calc) {
+export function renderCalculatorForm(calc) {
   return calc.fields
     .map((field) =>
       field.type === "number"

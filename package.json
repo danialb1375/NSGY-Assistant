@@ -1,0 +1,24 @@
+{
+  "name": "nsgy-assistant",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "**An offline-first neurosurgical clinical reference and decision-support application.**",
+  "main": "app.js",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetsGit-1t/NSGY-Assistant.git"
+  },
+  "keywords": "Neurosurgery, call, assistant, calculator",
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LetsGit-1t/NSGY-Assistant/issues"
+  },
+  "homepage": "https://github.com/LetsGit-1t/NSGY-Assistant#readme",
+  "devDependencies": {
+    "vitest": "^5.1.0"
+  }
+}

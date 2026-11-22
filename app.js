@@ -1,5 +1,29 @@
 "use strict";
 
+import { DATA } from "./data.js";
+import { WIZARD_FLOWS } from "./wizard-data.js";
+import { COMM_FIELDS, COMM_WORKFLOWS, COMM_DEFAULT } from "./communication-data.js";
+import { RECOMMENDATIONS } from "./recommendations-data.js";
+import { escapeHTML } from "./utils.js";
+
+import {
+  CALCULATORS,
+  CALC_STATE,
+  CALC_CONTEXT,
+  calcValue,
+  setCalcValue,
+  renderCalculatorForm,
+} from "./calculators/core.js";
+
+// Register calculators
+import "./calculators/gcs.js";
+import "./calculators/abc2.js";
+import "./calculators/asia.js";
+import "./calculators/hunt-hess.js";
+import "./calculators/ich.js";
+import "./calculators/modified-fisher.js";
+import "./calculators/tlics.js";
+
 const STORAGE = {
   favorites: "nsgy2:favorites",
   recent: "nsgy2:recent",
@@ -55,20 +79,6 @@ async function copyText(value) {
   area.select();
   document.execCommand("copy");
   area.remove();
-}
-
-function escapeHTML(value = "") {
-  return String(value).replace(
-    /[&<>'"]/g,
-    (c) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "'": "'",
-        '"': "&quot;",
-      })[c],
-  );
 }
 
 function workflowPayload() {
@@ -539,7 +549,14 @@ function renderContactEditor(index) {
 
 function communicationDefaults(id, focus) {
   const item = byId[id],
-    values = { diagnosis: focus || item.title };
+    values = { diagnosis: focus || item?.title };
+
+  if (!item) {
+    console.warn("Missing Communication Item:",{
+      id,
+      focus,
+    });
+  }
   const calcParts = CALCULATORS.filter(
     (calc) => calc.workflows.includes(id) && CALC_STATE[calc.id],
   ).map((calc) => {
@@ -665,72 +682,6 @@ function selectedValue(draft, key) {
   return unit && !value.toLowerCase().endsWith(unit.toLowerCase())
     ? `${value} ${unit}`
     : value;
-}
-
-function buildSummary(payload) {
-  const d = getCommDraft(payload),
-    v = (k) => selectedValue(d, k),
-    sent = [];
-  let lead = "";
-  if (v("age") && v("sex"))
-    lead = `I’m calling about a ${v("age")}-year-old ${v("sex")}`;
-  else if (v("age")) lead = `I’m calling about a ${v("age")}-year-old patient`;
-  else if (v("sex")) lead = `I’m calling about a ${v("sex")} patient`;
-  else lead = "I’m calling about a patient";
-  if (v("diagnosis")) lead += ` with ${v("diagnosis")}`;
-  if (v("procedure"))
-    lead += ` after ${v("procedure")}${
-      v("pod") ? ` on postoperative day ${v("pod")}` : ""
-    }`;
-  sent.push(lead + ".");
-  if (v("mechanism")) sent.push(`The mechanism was ${v("mechanism")}.`);
-  if (v("sahday")) sent.push(`This is SAH day ${v("sahday")}.`);
-  if (v("symptoms")) sent.push(`The current concern is ${v("symptoms")}.`);
-  if (v("seizure")) sent.push(`The seizure was described as ${v("seizure")}.`);
-  if (v("fever")) sent.push(`Infectious findings include ${v("fever")}.`);
-  if (v("wound")) sent.push(`The wound is ${v("wound")}.`);
-  const exam = [
-    v("exam"),
-    v("gcs") && `GCS ${v("gcs")}`,
-    v("pupils") && `pupils ${v("pupils")}`,
-    v("motor") && `motor ${v("motor")}`,
-    v("sensory") && `sensation ${v("sensory")}`,
-    v("saddle") && `saddle sensation ${v("saddle")}`,
-    v("bladder") && `bowel/bladder ${v("bladder")}`,
-    v("cranial") && `cranial nerves ${v("cranial")}`,
-    v("icp") && `ICP ${v("icp")}`,
-    v("hunt") && `Hunt–Hess ${v("hunt")}`,
-  ].filter(Boolean);
-  if (exam.length) sent.push(`Neurologically, ${exam.join("; ")}.`);
-  const imaging = [
-    v("imaging"),
-    v("thickness") && `hematoma thickness ${v("thickness")}`,
-    v("shift") && `midline shift ${v("shift")}`,
-    v("volume") && `hematoma volume ${v("volume")}`,
-    v("fracture"),
-    v("mri") && `MRI ${v("mri")}`,
-    v("cord") && `cord compression ${v("cord")}`,
-    v("stability") && `stability ${v("stability")}`,
-    v("fisher") && `modified Fisher ${v("fisher")}`,
-  ].filter(Boolean);
-  if (imaging.length) sent.push(`Imaging shows ${imaging.join("; ")}.`);
-  if (v("repeatct")) sent.push(`Repeat CT is ${v("repeatct")}.`);
-  const management = [
-    v("bloodthinner") && `antithrombotic status: ${v("bloodthinner")}`,
-    v("reversal") && `reversal: ${v("reversal")}`,
-    v("aneurysm") && `aneurysm: ${v("aneurysm")}`,
-    v("drain") && `drain: ${v("drain")}`,
-    v("calculators"),
-    v("asia") && `ASIA ${v("asia")}`,
-    v("tlics") && `TLICS ${v("tlics")}`,
-    v("operative") && `operative criteria: ${v("operative")}`,
-  ].filter(Boolean);
-  if (management.length)
-    sent.push(`Additional key data: ${management.join("; ")}.`);
-  if (v("recommendations"))
-    sent.push(`The proposed neurosurgical plan is ${v("recommendations")}.`);
-  if (v("notes")) sent.push(v("notes").replace(/[.!?]$/, "") + ".");
-  return sent.join(" ");
 }
 
 function buildSummary(payload) {
@@ -1460,9 +1411,13 @@ document.addEventListener(
   { passive: false },
 );
 
-if ("serviceWorker" in navigator) {
+const isLocalDev = ["localhost", "127.0.0.1"].includes(
+  window.location.hostname
+);
+
+if ("serviceWorker" in navigator && !isLocalDev) {
   window.addEventListener("load", () =>
-    navigator.serviceWorker.register("sw.js"),
+    navigator.serviceWorker.register("./sw.js"),
   );
 }
 

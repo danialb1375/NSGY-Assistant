@@ -1,3 +1,6 @@
+import { registerCalculator, CALC_CONTEXT } from "./core.js";
+import { calculateABC2Volume } from "./abc2_math.js";
+
 registerCalculator({
   id: "abc2",
   icon: "◉",
@@ -39,18 +42,21 @@ registerCalculator({
       placeholder: "0.5",
     },
   ],
+ 
   calculate(v) {
-    const a = +v.a || 0,
-      b = +v.b || 0,
-      c = (+v.slices || 0) * (+v.thickness || 0),
-      volume = (a * b * c) / 2;
+    const a = Number(v.a);
+    const b = Number(v.b);
+    const slices = Number(v.slices);
+    const thickness = Number(v.thickness);
 
-    if (volume > 0) CALC_CONTEXT.volume = volume;
+    const { c, volume } = calculateABC2Volume(a, b, slices, thickness);
+
+    CALC_CONTEXT.volume = volume;
 
     return {
-      score: volume ? volume.toFixed(1) : "—",
+      score: volume !==null ? volume.toFixed(1) : "—",
       unit: "mL",
-      label: volume ? `C = ${c.toFixed(1)} cm` : "Enter all four measurements",
+      label: c !==null ? `C = ${c.toFixed(1)} cm` : "Enter all four measurements",
       interpretation: "Estimated intraparenchymal hematoma volume.",
       details: [
         "Calculated as A × B × C ÷ 2.",
@@ -60,3 +66,5 @@ registerCalculator({
     };
   },
 });
+
+

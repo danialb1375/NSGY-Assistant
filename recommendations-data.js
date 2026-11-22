@@ -1,5 +1,5 @@
 /* Verified clinical memory aids. Original reference content remains in data.js. */
-const RECOMMENDATIONS = {
+export const RECOMMENDATIONS = {
   "ich-spontaneous": {
     items: [
       "Initiate smooth, sustained blood-pressure control; for mild–moderate ICH with presenting SBP 150–220 mmHg, targeting about 140 and maintaining 130–150 mmHg is reasonable. Avoid lowering below 130 mmHg.",

@@ -1,3 +1,5 @@
+import { registerCalculator } from "./core.js";
+
 registerCalculator({
   id: "hunt-hess",
   icon: "≈",

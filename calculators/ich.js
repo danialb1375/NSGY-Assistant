@@ -1,3 +1,27 @@
+import { registerCalculator, CALC_CONTEXT } from "./core.js";
+import { calculateICHScore } from "./ich_math.js";
+
+//Function logic
+function toNumberOrNaN(value) {
+  if (value === "" || value === null || value === undefined) {
+    return NaN;
+  }
+
+  return Number(value);
+};
+
+function toBooleanOrNull(value) {
+  if (value === 1 || value === "1" || value === true) {
+    return true;
+  }
+
+  if (value === 0 || value === "0" || value === false) {
+    return false;
+  }
+
+  return null;
+}
+
 registerCalculator({
   id: "ich",
   icon: "●",
@@ -29,7 +53,7 @@ registerCalculator({
       label: "ICH volume",
       unit: "mL",
       type: "number",
-      step: 0.1,
+      step: 0.5,
       placeholder: "0.0",
     },
     {
@@ -58,17 +82,21 @@ registerCalculator({
     if (!v.volume && CALC_CONTEXT.volume)
       v.volume = CALC_CONTEXT.volume.toFixed(1);
   },
+  
   calculate(v) {
-    const g = +v.gcs,
-      age = +v.age,
-      vol = +v.volume;
+    const age = toNumberOrNaN(v.age);
+    const gcs = toNumberOrNaN(v.gcs);
+    const vol = toNumberOrNaN(v.volume);
 
-    let score =
-      (g >= 3 && g <= 4 ? 2 : g >= 5 && g <= 12 ? 1 : 0) +
-      (age >= 80 ? 1 : 0) +
-      (vol >= 30 ? 1 : 0) +
-      (+v.ivh || 0) +
-      (+v.infra || 0);
+    const result = calculateICHScore(
+      age,
+      gcs,
+      vol,
+      toBooleanOrNull(v.ivh),
+      toBooleanOrNull(v.infra),
+    );
+
+    const score = result?.score;
 
     let mortality = {
       0: "0%",
@@ -81,17 +109,17 @@ registerCalculator({
     }[score];
 
     return {
-      score: g && age !== 0 ? score : "—",
+      score: result ? result.score : "—",
       label: "ICH Score · range 0–6",
-      interpretation: g
+      interpretation: result 
         ? `Approximate 30-day mortality in the original derivation cohort: ${mortality}.`
         : "Enter GCS and age. GCS and volume import automatically when calculated first.",
-      details: g
+      details: result 
         ? [
-            `GCS ${g}: ${g <= 4 ? 2 : g <= 12 ? 1 : 0} point(s)`,
-            `Age ${age}: ${age >= 80 ? 1 : 0} point`,
-            `Volume ${vol || 0} mL: ${vol >= 30 ? 1 : 0} point`,
-            `IVH: ${+v.ivh ? 1 : 0} point · Infratentorial: ${+v.infra ? 1 : 0} point`,
+            `GCS ${gcs}: ${result.components.gcs} point(s)`,
+            `Age ${age}: ${result.components.age} point`,
+            `Volume ${vol} mL: ${result.components.volume} point`,
+            `IVH: ${result.components.ivh} point · Infratentorial: ${result.components.infratentorial} point`,
             "Used for standardized baseline severity and population-level risk stratification.",
           ]
         : [],

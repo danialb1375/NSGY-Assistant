@@ -1,4 +1,8 @@
-registerCalculator({
+import { registerCalculator, CALC_CONTEXT } from "./core.js";
+import { calculateGCS } from "./gcs_math.js";
+
+registerCalculator(
+  {
   id: "gcs",
   icon: "◉",
   title: "Glasgow Coma Scale",
@@ -12,6 +16,16 @@ registerCalculator({
     "seizure",
   ],
   fields: [
+    {
+      key: "intubated",
+      label: "Intubated?",
+      type: "options",
+      default: "no",
+      options: [
+        { label: "Not intubated", value: "no" },
+        { label: "Intubated", value: "yes" },
+      ],
+    },
     {
       key: "eye",
       label: "Eye opening",
@@ -53,23 +67,41 @@ registerCalculator({
     },
   ],
   calculate(v) {
-    const e = +v.eye,
-      m = +v.motor,
-      verbal = +v.verbal,
-      total = e + verbal + m,
-      severity = total >= 13 ? "Mild" : total >= 9 ? "Moderate" : "Severe";
+    const eyes = Number(v.eye);
+    const verbal = Number(v.verbal);
+    const motor = Number(v.motor);
+    const intubated = v.intubated === "yes";
+    
+    const result = calculateGCS(eyes, verbal, motor, intubated);
 
-    CALC_CONTEXT.gcs = total;
+    if (result === null) {
+      CALC_CONTEXT.gcs = null;
+
+      return {
+        score: "—",
+        label: "Enter valid GCS components",
+        interpretation: "Unable to calculate GCS.",
+        details: [],
+        note: "Verify the eye, verbal, and motor responses.",
+          }
+    }
+
+    const severity = 
+      result.total >= 13 ? "Mild" : result.total >= 9 ? "Moderate" : "Severe";
+
+    const verbalDisplay = result.intubated ? `${result.components.verbal}T` : `${result.components.verbal}`
+
+    CALC_CONTEXT.gcs = result.total;
 
     return {
-      score: total,
-      label: `E${e} V${verbal} M${m}`,
+      score: result.display,
+      label: `E${result.components.eye} V${verbalDisplay} M${result.components.motor}`,
       interpretation: `${severity} impairment range.`,
       details: [
-        `Eye ${e} · Verbal ${verbal} · Motor ${m}`,
+        `Eye ${eyes} · Verbal ${verbalDisplay} · Motor ${motor}`,
         "Used to quantify and trend consciousness in trauma, hemorrhage, and critical illness.",
       ],
-      note: "Report components as well as the total. Intubation, sedation, paralysis, language barriers, and local injury can make a component non-testable and limit interpretation.",
+      note: "Report components as well as the total. Intubation, sedation, paralysis, language barriers, and local injury can make a component non-testable and limit interpretation. For intubated patients, V1T is a reporting convention representing an untestable verbal response. The substituted total should not be interpreted as a fully assessed GCS."
     };
   },
 });

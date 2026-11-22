@@ -1,3 +1,5 @@
+import { registerCalculator } from "./core.js";
+
 registerCalculator({
   id: "modified-fisher",
   icon: "≈",
